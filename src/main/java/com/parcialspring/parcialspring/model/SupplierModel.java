@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "suppliers", uniqueConstraints = @UniqueConstraint(columnNames = {"email", "nit"}))
+@Table(name = "suppliers", uniqueConstraints = @UniqueConstraint(columnNames = {"email", "nit", "supplier_id"}))
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -16,30 +16,30 @@ public class SupplierModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "supplier_id", length = 15, nullable = false, unique = true)
+    @Column(name = "supplier_id", nullable = false, unique = true)
     private String supplierId;
 
-    @Column(name = "name", nullable = false, length = 50)
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "phone", nullable = false, length = 15)
+    @Column(name = "phone", nullable = false)
     private String phone;
 
-    @Column(name = "email", nullable = false, length = 100, unique = true)
+    @Column(name = "email", nullable = false,  unique = true)
     private String email;
 
-    @Column(name = "city_id", length = 3, nullable = false)
+    @Column(name = "city_id",  nullable = false)
     private String cityId;
 
-    @Column(name = "state_id", length = 3, nullable = false)
+    @Column(name = "state_id", nullable = false)
     private String stateId;
 
-    @Column(name = "country_id", length = 3, nullable = false)
+    @Column(name = "country_id",  nullable = false)
     private String countryId;
 
-    @Column(name = "nit", length = 10, nullable = false, unique = true)
+    @Column(name = "nit",  nullable = false, unique = true)
     private String nit;
 
-    @Column(name = "address", length = 100, nullable = false)
+    @Column(name = "address",  nullable = false)
     private String address;
 }

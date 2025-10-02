@@ -8,8 +8,8 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(
         name = "products",
-        uniqueConstraints = @UniqueConstraint(columnNames = {"product_id", "name"}),
-        schema = "granme"
+        uniqueConstraints = @UniqueConstraint(columnNames = {"product_id", "name"})
+
 )
 @Data
 @AllArgsConstructor
