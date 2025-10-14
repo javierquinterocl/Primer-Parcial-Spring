@@ -28,6 +28,8 @@ public class UserModel {
     private String email;
     @Column(name = "phone", nullable = false)
     private String phone;
+    @Column(name = "password", nullable = false)
+    private String password;
 
 
 }
