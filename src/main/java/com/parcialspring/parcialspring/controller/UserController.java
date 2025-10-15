@@ -59,4 +59,11 @@ public class UserController {
     public void deleteUser(@PathVariable Long id){
         service.deleteUserById(id);
     }
+
+    //Endpoint para login de usuario
+    //Metodo POST http://localhost:8080/users/login
+    @PostMapping("/login")
+    public UserResponse login(@RequestBody UserRequest request){
+        return service.login(request.getEmail(), request.getPassword());
+    }
 }
