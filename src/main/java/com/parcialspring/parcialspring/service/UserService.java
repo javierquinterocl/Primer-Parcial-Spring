@@ -122,4 +122,21 @@ public class UserService {
         repository.deleteById(id);
     }
 
+    //Método para login de usuario
+    public UserResponse login(String email, String password) {
+        UserModel user = repository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado con email: " + email));
+        if (!user.getPassword().equals(password)) {
+            throw new RuntimeException("Contraseña incorrecta");
+        }
+        return new UserResponse(
+                user.getId(),
+                user.getIdCard(),
+                user.getCode(),
+                user.getFirstName(),
+                user.getLastName(),
+                user.getEmail(),
+                user.getPhone()
+        );
+    }
 }
