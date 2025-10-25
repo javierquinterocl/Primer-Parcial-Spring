@@ -14,4 +14,5 @@ public class ProductResponse {
     private Integer unitPrice;
     private Integer stock;
     private String productType;
+    private Long supplierId; // ID del proveedor
 }
