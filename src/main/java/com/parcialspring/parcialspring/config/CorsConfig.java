@@ -16,20 +16,34 @@ public class CorsConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("http://localhost:5173", "http://localhost:3000") // url React
+                .allowedOriginPatterns(
+                        "http://localhost:5173",
+                        "http://localhost:3000",
+                        "https://front-end-spring.vercel.app",
+                        "https://*.vercel.app"
+                ) // permite localhost y Vercel
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") //Metodos http permitidos
                 .allowedHeaders("*")
-                .allowCredentials(true);
+                .allowCredentials(false); // usar Authorization header (JWT) — no cookies
     }
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOriginPatterns(Arrays.asList("http://localhost:*"));
+        // Orígenes permitidos: Vercel (producción) y localhost (dev)
+        configuration.setAllowedOriginPatterns(Arrays.asList(
+                "https://front-end-spring.vercel.app",
+                "https://*.vercel.app",
+                "http://localhost:5173",
+                "http://localhost:3000"
+        ));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(Arrays.asList("*"));
-        configuration.setAllowCredentials(true);
-        
+        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "Accept"));
+        configuration.setExposedHeaders(Arrays.asList("Authorization"));
+        // Si usas solo Authorization header (sin cookies), mejor false:
+        configuration.setAllowCredentials(false);
+        configuration.setMaxAge(3600L);
+
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;

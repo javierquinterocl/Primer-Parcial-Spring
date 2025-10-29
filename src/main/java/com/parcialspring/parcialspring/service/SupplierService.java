@@ -24,7 +24,7 @@ public class SupplierService {
     // Crear un proveedor
     public SupplierResponse createSupplier(SupplierRequest request) {
         SupplierModel supplier = new SupplierModel();
-        supplier.setSupplierId(request.getName().substring(0, 3).toUpperCase() + System.currentTimeMillis()); // Ejemplo de generar supplierId
+        supplier.setSupplierId(request.getSupplierId()); // Ejemplo de generar supplierId
         supplier.setName(request.getName());
         supplier.setPhone(request.getPhone());
         supplier.setEmail(request.getEmail());
