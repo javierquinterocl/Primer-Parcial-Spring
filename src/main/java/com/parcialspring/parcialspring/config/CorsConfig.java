@@ -9,6 +9,7 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.Arrays;
+import java.util.List;
 
 @Configuration
 public class CorsConfig implements WebMvcConfigurer {
@@ -16,31 +17,32 @@ public class CorsConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOriginPatterns(
+                .allowedOrigins(
                         "http://localhost:5173",
                         "http://localhost:3000",
-                        "https://front-end-spring.vercel.app",
-                        "https://*.vercel.app"
-                ) // permite localhost y Vercel
-                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") //Metodos http permitidos
+                        "https://front-end-spring.vercel.app"
+                )
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
-                .allowCredentials(false); // usar Authorization header (JWT) — no cookies
+                .exposedHeaders("Authorization")
+                .allowCredentials(false)
+                .maxAge(3600);
     }
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        // Orígenes permitidos: Vercel (producción) y localhost (dev)
-        configuration.setAllowedOriginPatterns(Arrays.asList(
+
+        // Usar allowedOrigins en lugar de allowedOriginPatterns cuando allowCredentials es false
+        configuration.setAllowedOrigins(Arrays.asList(
                 "https://front-end-spring.vercel.app",
-                "https://*.vercel.app",
                 "http://localhost:5173",
                 "http://localhost:3000"
         ));
+
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "Accept"));
-        configuration.setExposedHeaders(Arrays.asList("Authorization"));
-        // Si usas solo Authorization header (sin cookies), mejor false:
+        configuration.setAllowedHeaders(List.of("*"));
+        configuration.setExposedHeaders(Arrays.asList("Authorization", "Content-Type"));
         configuration.setAllowCredentials(false);
         configuration.setMaxAge(3600L);
 

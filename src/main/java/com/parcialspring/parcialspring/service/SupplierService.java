@@ -46,7 +46,9 @@ public class SupplierService {
                 newSupplier.getStateId(),
                 newSupplier.getCountryId(),
                 newSupplier.getNit(),
-                newSupplier.getAddress()
+                newSupplier.getAddress(),
+                newSupplier.getCreatedAt(),
+                newSupplier.getUpdatedAt()
         );
     }
 
@@ -65,7 +67,9 @@ public class SupplierService {
                         s.getStateId(),
                         s.getCountryId(),
                         s.getNit(),
-                        s.getAddress()
+                        s.getAddress(),
+                        s.getCreatedAt(),
+                        s.getUpdatedAt()
                 ))
                 .toList();
     }
@@ -85,7 +89,9 @@ public class SupplierService {
                 supplier.getStateId(),
                 supplier.getCountryId(),
                 supplier.getNit(),
-                supplier.getAddress()
+                supplier.getAddress(),
+                supplier.getCreatedAt(),
+                supplier.getUpdatedAt()
         );
     }
 
@@ -115,7 +121,9 @@ public class SupplierService {
                 updatedSupplier.getStateId(),
                 updatedSupplier.getCountryId(),
                 updatedSupplier.getNit(),
-                updatedSupplier.getAddress()
+                updatedSupplier.getAddress(),
+                updatedSupplier.getCreatedAt(),
+                updatedSupplier.getUpdatedAt()
         );
     }
 

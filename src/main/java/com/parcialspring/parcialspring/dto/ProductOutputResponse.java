@@ -16,5 +16,5 @@ public class ProductOutputResponse {
     private Integer quantity;
     private String notes;
     private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }
-

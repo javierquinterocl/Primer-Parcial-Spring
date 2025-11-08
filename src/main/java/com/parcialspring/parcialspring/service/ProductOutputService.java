@@ -67,7 +67,8 @@ public class ProductOutputService {
                 newProductOutput.getProduct().getName(),
                 newProductOutput.getQuantity(),
                 newProductOutput.getNotes(),
-                newProductOutput.getCreatedAt()
+                newProductOutput.getCreatedAt(),
+                newProductOutput.getUpdatedAt()
         );
     }
 
@@ -84,7 +85,8 @@ public class ProductOutputService {
                         po.getProduct().getName(),
                         po.getQuantity(),
                         po.getNotes(),
-                        po.getCreatedAt()
+                        po.getCreatedAt(),
+                        po.getUpdatedAt()
                 ))
                 .toList();
     }
@@ -102,7 +104,8 @@ public class ProductOutputService {
                 productOutput.getProduct().getName(),
                 productOutput.getQuantity(),
                 productOutput.getNotes(),
-                productOutput.getCreatedAt()
+                productOutput.getCreatedAt(),
+                productOutput.getUpdatedAt()
         );
     }
 
@@ -121,4 +124,3 @@ public class ProductOutputService {
         repository.deleteById(id);
     }
 }
-
