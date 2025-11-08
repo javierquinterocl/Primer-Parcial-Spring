@@ -5,6 +5,11 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+import java.time.LocalDateTime;
+import java.util.List;
+
 
 @Entity
 @Table(name = "users", uniqueConstraints = @UniqueConstraint(columnNames = {"email", "code", "idCard"}))
@@ -28,6 +33,24 @@ public class UserModel {
     private String email;
     @Column(name = "phone", nullable = false)
     private String phone;
+    @Column(name = "password", nullable = false)
+    private String password;
+    @Column(name = "role", nullable = true)
+    private String role;
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
 
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<TokenModel> tokens;
+
+    public String getRole() {
+        return this.role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
 
 }

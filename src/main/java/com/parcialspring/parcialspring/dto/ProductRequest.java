@@ -10,4 +10,5 @@ public class ProductRequest {
     private Integer unitPrice;
     private Integer stock;
     private String productType;
+    private Long supplierId; // ID del proveedor
 }
