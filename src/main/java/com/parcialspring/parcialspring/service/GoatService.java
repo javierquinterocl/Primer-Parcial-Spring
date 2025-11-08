@@ -104,7 +104,9 @@ public class GoatService {
                 g.getOffspringCount(),
                 g.getParentId(),
                 g.getStatus(),
-                g.getNotes()
+                g.getNotes(),
+                g.getCreatedAt(),
+                g.getUpdatedAt()
         );
     }
 }

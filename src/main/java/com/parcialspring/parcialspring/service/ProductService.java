@@ -50,7 +50,9 @@ public class ProductService {
                 newProduct.getUnitPrice(),
                 newProduct.getStock(),
                 newProduct.getProductType(),
-                newProduct.getSupplier().getId()
+                newProduct.getSupplier().getId(),
+                newProduct.getCreatedAt(),
+                newProduct.getUpdatedAt()
         );
     }
 
@@ -67,7 +69,9 @@ public class ProductService {
                         p.getUnitPrice(),
                         p.getStock(),
                         p.getProductType(),
-                        p.getSupplier().getId()
+                        p.getSupplier().getId(),
+                        p.getCreatedAt(),
+                        p.getUpdatedAt()
                 )).toList();
     }
 
@@ -84,7 +88,9 @@ public class ProductService {
                 product.getUnitPrice(),
                 product.getStock(),
                 product.getProductType(),
-                product.getSupplier().getId()
+                product.getSupplier().getId(),
+                product.getCreatedAt(),
+                product.getUpdatedAt()
         );
     }
 
@@ -116,7 +122,9 @@ public class ProductService {
                 updatedProduct.getUnitPrice(),
                 updatedProduct.getStock(),
                 updatedProduct.getProductType(),
-                updatedProduct.getSupplier().getId()
+                updatedProduct.getSupplier().getId(),
+                updatedProduct.getCreatedAt(),
+                updatedProduct.getUpdatedAt()
         );
     }
 

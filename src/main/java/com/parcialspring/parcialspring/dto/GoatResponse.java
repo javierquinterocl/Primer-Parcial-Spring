@@ -3,6 +3,8 @@ package com.parcialspring.parcialspring.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 @Data
 @AllArgsConstructor
 public class GoatResponse {
@@ -22,4 +24,6 @@ public class GoatResponse {
     private String parentId;
     private String status;
     private String notes;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }
