@@ -29,7 +29,10 @@ public class SecurityConfig {
             .cors(cors -> cors.configurationSource(corsConfigurationSource))
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                .requestMatchers(HttpMethod.POST, "/users", "/users/login").permitAll()
+                .requestMatchers(HttpMethod.POST, "/users", "/users/login", "/users/logout").permitAll()
+                .requestMatchers(HttpMethod.DELETE, "/users/**").authenticated()
+                .requestMatchers(HttpMethod.PUT, "/users/**").authenticated()
+                .requestMatchers(HttpMethod.GET, "/users/**").authenticated()
                 .anyRequest().authenticated()
             )
             .httpBasic(b -> b.disable())
