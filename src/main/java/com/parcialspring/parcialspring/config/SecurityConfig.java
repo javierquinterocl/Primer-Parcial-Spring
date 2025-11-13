@@ -8,36 +8,30 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.cors.CorsConfigurationSource;
 
 @Configuration
 @Order(1)
 public class SecurityConfig {
 
     private final JwtAuthFilter jwtAuthFilter;
-    private final CorsConfigurationSource corsConfigurationSource;
 
-    public SecurityConfig(JwtAuthFilter jwtAuthFilter, CorsConfigurationSource corsConfigurationSource) {
+    public SecurityConfig(JwtAuthFilter jwtAuthFilter) {
         this.jwtAuthFilter = jwtAuthFilter;
-        this.corsConfigurationSource = corsConfigurationSource;
     }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .csrf(csrf -> csrf.disable())
-            .cors(cors -> cors.configurationSource(corsConfigurationSource))
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                .requestMatchers(HttpMethod.POST, "/users", "/users/login", "/users/logout").permitAll()
-                .requestMatchers(HttpMethod.DELETE, "/users/**").authenticated()
-                .requestMatchers(HttpMethod.PUT, "/users/**").authenticated()
-                .requestMatchers(HttpMethod.GET, "/users/**").authenticated()
-                .anyRequest().authenticated()
-            )
-            .httpBasic(b -> b.disable())
-            .formLogin(f -> f.disable())
-            .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+                .csrf(csrf -> csrf.disable())
+                .cors(cors -> {})
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/users", "/users/login", "/users/logout").permitAll()
+                        .anyRequest().authenticated()
+                )
+                .httpBasic(b -> b.disable())
+                .formLogin(f -> f.disable())
+                .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
