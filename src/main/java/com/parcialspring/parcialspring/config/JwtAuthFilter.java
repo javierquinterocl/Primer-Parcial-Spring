@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -57,6 +58,18 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 return;
             }
             TokenModel stored = tokenOpt.get();
+
+            // Verificar si el token ha expirado comparando con la fecha actual
+            if (stored.getExpiresAt() != null && stored.getExpiresAt().isBefore(LocalDateTime.now())) {
+                // Marcar el token como expirado en la base de datos
+                if (!stored.isExpired()) {
+                    stored.setExpired(true);
+                    tokenRepository.save(stored);
+                }
+                filterChain.doFilter(request, response);
+                return;
+            }
+
             if (stored.isRevoked() || stored.isExpired()) {
                 filterChain.doFilter(request, response);
                 return;
@@ -90,4 +103,3 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 }
-
