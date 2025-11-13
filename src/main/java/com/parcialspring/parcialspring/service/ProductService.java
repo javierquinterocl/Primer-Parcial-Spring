@@ -3,7 +3,9 @@ package com.parcialspring.parcialspring.service;
 import com.parcialspring.parcialspring.dto.ProductRequest;
 import com.parcialspring.parcialspring.dto.ProductResponse;
 import com.parcialspring.parcialspring.model.ProductModel;
+import com.parcialspring.parcialspring.model.SupplierModel;
 import com.parcialspring.parcialspring.repository.ProductRepository;
+import com.parcialspring.parcialspring.repository.SupplierRepository;
 import lombok.Data;
 import org.springframework.stereotype.Service;
 
@@ -14,15 +16,21 @@ import java.util.List;
 public class ProductService {
 
     private final ProductRepository repository;
+    private final SupplierRepository supplierRepository;
 
-    ProductService(ProductRepository repository) {
+    ProductService(ProductRepository repository, SupplierRepository supplierRepository) {
         this.repository = repository;
+        this.supplierRepository = supplierRepository;
     }
 
     // Métodos del servicio
 
     // Metodo para Crear producto usando Repository Save
     public ProductResponse createProduct(ProductRequest request) {
+        // Buscar el proveedor por ID
+        SupplierModel supplier = supplierRepository.findById(request.getSupplierId())
+                .orElseThrow(() -> new RuntimeException("Proveedor no encontrado con id " + request.getSupplierId()));
+
         ProductModel product = new ProductModel();
         product.setProductId(request.getProductId());
         product.setName(request.getName());
@@ -30,6 +38,7 @@ public class ProductService {
         product.setUnitPrice(request.getUnitPrice());
         product.setStock(request.getStock());
         product.setProductType(request.getProductType());
+        product.setSupplier(supplier);
 
         ProductModel newProduct = repository.save(product);
 
@@ -40,7 +49,10 @@ public class ProductService {
                 newProduct.getDescription(),
                 newProduct.getUnitPrice(),
                 newProduct.getStock(),
-                newProduct.getProductType()
+                newProduct.getProductType(),
+                newProduct.getSupplier().getId(),
+                newProduct.getCreatedAt(),
+                newProduct.getUpdatedAt()
         );
     }
 
@@ -56,7 +68,10 @@ public class ProductService {
                         p.getDescription(),
                         p.getUnitPrice(),
                         p.getStock(),
-                        p.getProductType()
+                        p.getProductType(),
+                        p.getSupplier().getId(),
+                        p.getCreatedAt(),
+                        p.getUpdatedAt()
                 )).toList();
     }
 
@@ -72,7 +87,10 @@ public class ProductService {
                 product.getDescription(),
                 product.getUnitPrice(),
                 product.getStock(),
-                product.getProductType()
+                product.getProductType(),
+                product.getSupplier().getId(),
+                product.getCreatedAt(),
+                product.getUpdatedAt()
         );
     }
 
@@ -80,6 +98,13 @@ public class ProductService {
     public ProductResponse updateProduct(Long id, ProductRequest request) {
         ProductModel product = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Producto no encontrado por id " + id));
+
+        // Buscar el proveedor por ID si se proporciona uno nuevo
+        if (request.getSupplierId() != null) {
+            SupplierModel supplier = supplierRepository.findById(request.getSupplierId())
+                    .orElseThrow(() -> new RuntimeException("Proveedor no encontrado con id " + request.getSupplierId()));
+            product.setSupplier(supplier);
+        }
 
         product.setName(request.getName());
         product.setDescription(request.getDescription());
@@ -96,7 +121,10 @@ public class ProductService {
                 updatedProduct.getDescription(),
                 updatedProduct.getUnitPrice(),
                 updatedProduct.getStock(),
-                updatedProduct.getProductType()
+                updatedProduct.getProductType(),
+                updatedProduct.getSupplier().getId(),
+                updatedProduct.getCreatedAt(),
+                updatedProduct.getUpdatedAt()
         );
     }
 

@@ -3,6 +3,8 @@ package com.parcialspring.parcialspring.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 @Data
 @AllArgsConstructor
 public class ProductResponse {
@@ -14,4 +16,7 @@ public class ProductResponse {
     private Integer unitPrice;
     private Integer stock;
     private String productType;
+    private Long supplierId; // ID del proveedor
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }

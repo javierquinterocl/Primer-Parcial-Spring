@@ -1,10 +1,12 @@
 package com.parcialspring.parcialspring.controller;
 
 
+import com.parcialspring.parcialspring.dto.AuthenticationResponse;
 import com.parcialspring.parcialspring.dto.UserRequest;
 import com.parcialspring.parcialspring.dto.UserResponse;
 import com.parcialspring.parcialspring.service.UserService;
 import lombok.Data;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -58,5 +60,20 @@ public class UserController {
     @DeleteMapping("/{id}")
     public void deleteUser(@PathVariable Long id){
         service.deleteUserById(id);
+    }
+
+    //Endpoint para login de usuario
+    //Metodo POST http://localhost:8080/users/login
+    @PostMapping("/login")
+    public AuthenticationResponse login(@RequestBody UserRequest request){
+        return service.login(request.getEmail(), request.getPassword());
+    }
+
+    // Endpoint para logout
+    // Metodo POST http://localhost:8080/users/logout
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(@RequestHeader(name = "Authorization", required = false) String authorization) {
+        service.logout(authorization);
+        return ResponseEntity.ok().build();
     }
 }
