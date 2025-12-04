@@ -190,3 +190,32 @@ La aplicación estará disponible en:
   ![Arquitectura General](https://hector-riano.s3.us-east-1.amazonaws.com/procesosN/edicionProveedor.png)
  ### eliminar Proveedores
   ![Arquitectura General](https://hector-riano.s3.us-east-1.amazonaws.com/procesosN/eliminarProveedor.png)
+
+## FUNCIONALIDAD DE EXPORTACIÓN DE DATOS
+
+El sistema incluye capacidad de exportar datos a Excel y PDF para las entidades principales: **Proveedores(Supplier)** .
+
+### Endpoints de Exportación
+
+#### Exportar Productos
+- **Excel**: `GET http://localhost:8080/suppliers/export/excel`
+    - Genera archivo `productos.xlsx` con todos los registros de proveedores
+    - Content-Type: `application/octet-stream`
+
+- **PDF**: `GET http://localhost:8080/suppliers/export/pdf`
+    - Genera archivo `productos.pdf` con reporte tabular de proveedores
+    - Content-Type: `application/pdf`
+
+### Tecnologías Utilizadas
+
+- **Apache POI**: Librería para generación de archivos Excel (.xlsx)
+- **iText / OpenPDF**: Librería para generación de documentos PDF
+
+### Respuestas HTTP
+
+| Código | Descripción |
+|--------|-------------|
+| 200 | Archivo generado exitosamente |
+| 500 | Error al generar el archivo |
+
+ 

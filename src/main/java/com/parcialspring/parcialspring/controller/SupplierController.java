@@ -5,12 +5,23 @@ import com.parcialspring.parcialspring.dto.SupplierResponse;
 import com.parcialspring.parcialspring.service.SupplierService;
 import lombok.Data;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/suppliers")
 @Data
+@Tag(name = "Suppliers (Proveedores)", description = "Endpoints para la gestión de proveedores del proyecto caprino")
 public class SupplierController {
 
     private final SupplierService service;
@@ -56,5 +67,65 @@ public class SupplierController {
     @DeleteMapping("/{id}")
     public void deleteSupplier(@PathVariable Long id) {
         service.deleteSupplierById(id);
+    }
+
+    // ----------------------------
+    // EXPORTAR PROVEEDORES A EXCEL
+    // ----------------------------
+    @Operation(
+            summary = "Exportar proveedores a Excel",
+            description = "Genera y descarga un archivo Excel (.xlsx) con todos los proveedores registrados"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Archivo Excel generado exitosamente",
+                    content = @Content(mediaType = "application/octet-stream")
+            ),
+            @ApiResponse(responseCode = "500", description = "Error al generar el archivo Excel")
+    })
+    @GetMapping("/export/excel")
+    public ResponseEntity<byte[]> exportSuppliersToExcel() {
+        try {
+            byte[] excelData = service.exportToExcel();
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+            headers.setContentDispositionFormData("attachment", "proveedores.xlsx");
+
+            return new ResponseEntity<>(excelData, headers, HttpStatus.OK);
+        } catch (IOException e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    // ----------------------------
+    // EXPORTAR PROVEEDORES A PDF
+    // ----------------------------
+    @Operation(
+            summary = "Exportar proveedores a PDF",
+            description = "Genera y descarga un archivo PDF con un reporte de todos los proveedores"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Archivo PDF generado exitosamente",
+                    content = @Content(mediaType = "application/pdf")
+            ),
+            @ApiResponse(responseCode = "500", description = "Error al generar el archivo PDF")
+    })
+    @GetMapping("/export/pdf")
+    public ResponseEntity<byte[]> exportSuppliersToPdf() {
+        try {
+            byte[] pdfData = service.exportToPdf();
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_PDF);
+            headers.setContentDispositionFormData("attachment", "proveedores.pdf");
+
+            return new ResponseEntity<>(pdfData, headers, HttpStatus.OK);
+        } catch (IOException e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }
