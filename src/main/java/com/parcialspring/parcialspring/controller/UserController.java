@@ -2,6 +2,7 @@ package com.parcialspring.parcialspring.controller;
 
 
 import com.parcialspring.parcialspring.dto.AuthenticationResponse;
+import com.parcialspring.parcialspring.dto.LoginRequest;
 import com.parcialspring.parcialspring.dto.UserRequest;
 import com.parcialspring.parcialspring.dto.UserResponse;
 import com.parcialspring.parcialspring.service.UserService;
@@ -65,7 +66,7 @@ public class UserController {
     //Endpoint para login de usuario
     //Metodo POST http://localhost:8080/users/login
     @PostMapping("/login")
-    public AuthenticationResponse login(@RequestBody UserRequest request){
+    public AuthenticationResponse login(@RequestBody LoginRequest request){
         return service.login(request.getEmail(), request.getPassword());
     }
 

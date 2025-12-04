@@ -111,9 +111,142 @@ Todo esto en el marco del proyecto caprino de la granja experimental de la UFPS 
 | `GET` | `/goats/{id}` | Obtener información de una cabra por ID |
 | `PUT` | `/goats/{id}` | Actualizar información de una cabra |
 | `DELETE` | `/goats/{id}` | Eliminar registro de una cabra |
+| `GET` | `/goats/export/excel` | Exportar datos de cabras a Excel (.xlsx) |
+| `GET` | `/goats/export/pdf` | Exportar datos de cabras a PDF |
+
+#### Funcionalidad de Exportación de Datos
+**Desarrollado por: Andrés Salas - 192164**
+
+El módulo de gestión de caprinos incluye funcionalidades avanzadas para exportar la información completa de las cabras en dos formatos:
+
+**1. Exportación a Excel (.xlsx)**
+- **Endpoint:** `GET /goats/export/excel`
+- **Descripción:** Genera un archivo Excel con todos los datos de las cabras registradas
+- **Formato:** XLSX 
+- **Características:**
+  - Encabezados con estilo
+  - Columnas autoajustadas al contenido
+  - Incluye todos los campos: ID, ID Cabra, Nombre, Raza, Fecha Nacimiento, Género, Tipo, Peso, Producción Leche, Consumo Alimento, Vacunaciones, Períodos Celo, Crías, ID Padre, Estado, Notas, Fecha Creación, Fecha Actualización
+- **Uso:** Ideal para análisis de datos, reportes periódicos y respaldos de información
+
+**2. Exportación a PDF**
+- **Endpoint:** `GET /goats/export/pdf`
+- **Descripción:** Genera un documento PDF con un reporte tabular de las cabras
+- **Formato:** PDF 
+- **Características:**
+  - Orientación horizontal 
+  - Título centrado: "Reporte de Cabras"
+  - Tabla con encabezados estilizados 
+  - Columnas principales optimizadas para impresión
+  - Fuente legible tamaño 8pt para datos
+
+
+**Tecnologías Utilizadas:**
+- Apache POI 5.2.3 para generación de archivos Excel
+- OpenPDF 1.3.30 para generación de documentos PDF
+
+
+
+### Documentación Swagger/OpenAPI - Módulo de Caprinos
+**Desarrollado por: Andrés Salas - 192164**
+
+El sistema incluye documentación interactiva completa de la API utilizando **Swagger/OpenAPI 3.0**, lo que facilita la comprensión, prueba y consumo de los endpoints por parte de desarrolladores y usuarios técnicos.
+
+#### Configuración de Swagger
+
+**Dependencia utilizada:**
+```xml
+<dependency>
+    <groupId>org.springdoc</groupId>
+    <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+    <version>2.3.0</version>
+</dependency>
+```
+
+#### Acceso a la Documentación
+
+**URLs de Acceso:**
+- **Interfaz Swagger UI:** `http://localhost:8080/swagger-ui.html` (local) o `https://primer-parcial-spring-production.up.railway.app/swagger-ui.html` (producción)
+- **Especificación OpenAPI JSON:** `http://localhost:8080/api-docs`
+
+#### Características de la Documentación
+
+La documentación Swagger del módulo de caprinos incluye:
+
+1. **Descripción Detallada de Endpoints**
+   - Cada endpoint incluye su propósito y funcionalidad
+   - Métodos HTTP claramente identificados (GET, POST, PUT, DELETE)
+   - Parámetros requeridos y opcionales documentados
+
+2. **Modelos de Datos Documentados**
+   - `GoatRequest`: Modelo de entrada para crear/actualizar cabras
+   - `GoatResponse`: Modelo de respuesta con datos completos de la cabra
+   - Cada campo incluye:
+     - Descripción del propósito
+     - Tipo de dato
+     - Ejemplos de valores
+     - Valores permitidos (para campos enumerados)
+
+3. **Códigos de Respuesta HTTP**
+   - `200 OK`: Operación exitosa
+   - `400 Bad Request`: Datos inválidos
+   - `404 Not Found`: Recurso no encontrado
+   - `500 Internal Server Error`: Error del servidor
+
+4. **Pruebas Interactivas**
+   - Interfaz "Try it out" para probar endpoints directamente desde el navegador
+   - Generación automática de ejemplos de peticiones
+   - Visualización de respuestas en tiempo real
+
+#### Autenticación Obligatoria para Endpoints Protegidos
+
+**IMPORTANTE:** Para probar los endpoints protegidos (todos excepto `/users/login` y `/users/register`), debes autenticarte primero. Sigue estos pasos:
+
+**Paso 1: Obtener el Token JWT**
+1. En Swagger UI, busca el endpoint `POST /users/login`
+2. Haz clic en "Try it out"
+3. Ingresa tus credenciales en el formato:
+   ```json
+   {
+     "email": "tu_email@example.com",
+     "password": "tu_password"
+   }
+   ```
+4. Haz clic en "Execute"
+5. **Copia el token** de la respuesta (valor del campo `token`)
+
+**Paso 2: Configurar la Autorización**
+1. En la parte superior derecha de Swagger UI, busca el botón **"Authorize"**
+2. Haz clic en él
+3. En el campo que aparece, **pega solo el token** (sin agregar "Bearer " ni nada más)
+4. Haz clic en "Authorize"
+5. Cierra el modal haciendo clic en "Close"
+
+**Paso 3: Probar Endpoints Protegidos**
+- Ahora todas tus peticiones incluirán automáticamente el token de autorización
+- Puedes probar cualquier endpoint (GET, POST, PUT, DELETE)
+- El token permanecerá activo mientras no cierres Swagger o expire (24 horas por defecto)
+
+**Endpoints que NO requieren autenticación:**
+- `POST /users/login` - Iniciar sesión
+- `POST /users` - Crear usuario (registro)
+
+**Todos los demás endpoints REQUIEREN autenticación:**
+- Gestión de cabras (`/goats`)
+- Gestión de productos (`/products`)
+- Gestión de proveedores (`/suppliers`)
+- Gestión de usuarios (`/users/*` excepto login)
+- Salidas de productos (`/product-outputs`)
+- Exportación de datos (`/goats/export/*`)
+
+**Nota:** Si recibes un error 403 (Forbidden), significa que:
+- No has configurado el token en Swagger
+- El token ha expirado
+- El token no es válido
+
+En ese caso, repite el proceso de login y autorización.
 
 ---
-
 ### Gestión de Salidas de Productos
 **Responsable: Javier Quintero - 192163**
 
@@ -144,7 +277,8 @@ Primer-Parcial-Spring/
 │   │   │               │   ├── CorsConfig.java
 │   │   │               │   ├── JwtAuthFilter.java
 │   │   │               │   ├── JwtUtil.java
-│   │   │               │   └── SecurityConfig.java
+│   │   │               │   ├── SecurityConfig.java
+│   │   │               │   └── SwaggerConfig.java
 │   │   │               │
 │   │   │               ├── controller/
 │   │   │               │   ├── GoatController.java
@@ -157,6 +291,7 @@ Primer-Parcial-Spring/
 │   │   │               │   ├── AuthenticationResponse.java
 │   │   │               │   ├── GoatRequest.java
 │   │   │               │   ├── GoatResponse.java
+│   │   │               │   ├── LoginRequest.java
 │   │   │               │   ├── ProductOutputRequest.java
 │   │   │               │   ├── ProductOutputResponse.java
 │   │   │               │   ├── ProductRequest.java
@@ -200,7 +335,9 @@ Primer-Parcial-Spring/
 ├── pom.xml
 ├── mvnw
 ├── mvnw.cmd
-└── README.md
+├── README.md
+├── README_HJRL.md
+├── README_JAQC.md
 ```
 
 ---
