@@ -162,5 +162,60 @@ La conexión se define en el archivo `application.properties` con las credencial
 - Revisar `SecurityConfig` para permitir `OPTIONS` y endpoints de autenticación.
 
 **5. Despliegue automático**
-- Railway despliega automáticamente al hacer push a la rama configurada 
+- Railway despliega automáticamente al hacer push a la rama configurada
 
+
+---
+
+## FUNCIONALIDAD DE EXPORTACIÓN DE DATOS
+
+El sistema incluye capacidad de **exportar datos a Excel y PDF** para las entidades principales: **Cabras (Goats)** y **Productos (Products)**.
+
+### Endpoints de Exportación
+
+#### Exportar Cabras
+- **Excel**: `GET http://localhost:8080/goats/export/excel`
+  - Genera archivo `cabras.xlsx` con todos los registros de cabras
+  - Content-Type: `application/octet-stream`
+  
+- **PDF**: `GET http://localhost:8080/goats/export/pdf`
+  - Genera archivo `cabras.pdf` con reporte tabular de cabras
+  - Content-Type: `application/pdf`
+
+#### Exportar Productos
+- **Excel**: `GET http://localhost:8080/products/export/excel`
+  - Genera archivo `productos.xlsx` con todos los registros de productos
+  - Content-Type: `application/octet-stream`
+  
+- **PDF**: `GET http://localhost:8080/products/export/pdf`
+  - Genera archivo `productos.pdf` con reporte tabular de productos
+  - Content-Type: `application/pdf`
+
+### Tecnologías Utilizadas
+
+- **Apache POI**: Librería para generación de archivos Excel (.xlsx)
+- **iText / OpenPDF**: Librería para generación de documentos PDF
+
+### Respuestas HTTP
+
+| Código | Descripción |
+|--------|-------------|
+| 200 | Archivo generado exitosamente |
+| 500 | Error al generar el archivo |
+
+### Uso desde Frontend
+
+```javascript
+// Ejemplo: Exportar productos a Excel
+const exportToExcel = async () => {
+  const response = await axios.get('http://localhost:8080/products/export/excel', {
+    responseType: 'blob'
+  });
+  const url = window.URL.createObjectURL(new Blob([response.data]));
+  const link = document.createElement('a');
+  link.href = url;
+  link.setAttribute('download', 'productos.xlsx');
+  document.body.appendChild(link);
+  link.click();
+};
+``` 
